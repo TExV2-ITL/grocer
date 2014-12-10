@@ -24,16 +24,8 @@ module Grocer
       context = OpenSSL::SSL::SSLContext.new
 
       if certificate
-
-        if certificate.respond_to?(:read)
-          cert_data = certificate.read
-          certificate.rewind if certificate.respond_to?(:rewind)
-        else
-          cert_data = File.read(certificate)
-        end
-
-        context.key  = OpenSSL::PKey::RSA.new(cert_data, passphrase)
-        context.cert = OpenSSL::X509::Certificate.new(cert_data)
+        context.key  = OpenSSL::PKey::RSA.new(certificate, passphrase)
+        context.cert = OpenSSL::X509::Certificate.new(certificate)
       end
 
       @sock            = TCPSocket.new(gateway, port)
